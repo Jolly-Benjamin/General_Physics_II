@@ -1105,6 +1105,7 @@ $4^2=16$、$\binom{5}{2}=10$、$\binom{4}{2}=6$。
 \begin{notebox}
 需要注意：把 $g_i$ 引入三种计数时，$g_i$ 是一个能级包含的\emph{可区别单粒子态数}，不是粒子数；若 $N_i$ 表示整个能级上的占据数，BE/FD 的分子必须有 $g_i$。对某个单一量子态的平均占据数才没有 $g_i$ 因子。
 \end{notebox}
+注：考试不考察 Bose 系统与 Fermi 系统的相关内容。
 
 %===========================
 \chapter{近平衡态中的输运过程}
@@ -1593,181 +1594,284 @@ D\propto T^{1.75\sim2.0}\]
 \end{notebox}
 
 \section{布朗运动及其引起的扩散}
-先讨论随机游走，再引入 Langevin 方程，并最后与 RC 电路热噪声类比。
-
-\subsection*{随机游走图像}
-设布朗粒子每经过时间 $\tau$ 发生一次无规则位移，位移长度尺度为 $\lambda$，方向各向同性。经过 $n$ 步后，总位移是
+1827 年，Brown 发现悬浮在液体中的花粉颗粒永不停息地做无规则运动。1905 年 Einstein 指出，这是液体分子无规碰撞在宏观尺度上的表现，并给出可检验的定量预言；1908 年 Perrin 用显微镜跟踪颗粒、由位移统计定出 Avogadro 常数，使“原子确实存在”第一次有了直接的实验证据。
+本节按下面这条线索展开：Langevin 方程 $\to$ 随机游走 $\to$ 求解 $\to$ 白噪声 $\to$ $\avg{v^2}$ $\to$ $\avg{x^2}$ 与 Einstein 扩散系数。
+\subsection*{（一）Langevin 方程}
+把布朗粒子看成受两种力作用的经典粒子：周围液体对它的黏滞阻力（半径 $a$ 的小球在黏度 $\eta$ 的流体中受 Stokes 阻力 $6\pi\eta a\,v$），以及液体分子碰撞造成的、看起来完全无规的力 $\vec F(\vec r,t)$。于是
 \[
-\vr=\vr_1+\vr_2+\cdots+\vr_n.
+m\frac{\dd^2\vec r}{\dd t^2}
+=-6\pi\eta a\frac{\dd\vec r}{\dd t}+\vec F(\vec r,t).
 \]
-由于各步独立、方向无偏，
+两边除以 $m$，并记
 \[
-\avg{\vr}=0,
+\beta=\frac{6\pi\eta a}{m},\qquad
+\vec f=\frac{\vec F}{m},
+\qquad [f]=\mathrm{m\cdot s^{-2}},
+\]
+得 \textbf{Langevin 方程}
+\[
+\boxed{\frac{\dd^2\vec r}{\dd t^2}
+=-\beta\frac{\dd\vec r}{\dd t}+\vec f(\vec r,t)} .
+\]
+即 Brown 粒子同时受到黏滞阻力和某个随机力。
+液体是均匀的、无外场、无宏观流，故随机力的统计性质与粒子位置无关；取各向同性后可以简化为
+\[
+\frac{\dd^2\vec r}{\dd t^2}
+=-\beta\frac{\dd\vec r}{\dd t}+\vec f(t),
+\qquad\text{即}\quad \vec f\ \text{与}\ \vec r\ \text{无关}.
+\]
+此举的物理含义是：随机力的“强度”只由温度与流体性质决定，与粒子跑到哪里无关。
+平衡态下有两个矩是已知的（后面反复用）：
+\[
+\avg{\vec v}=0\quad(\text{各向同性}),
 \qquad
-\avg{r^2}=n\lambda^2.
+\avg{v_x^2}=\frac{\kBT}{m}\quad(\text{能量均分：}\tfrac12m\avg{v_x^2}=\tfrac12\kBT).
 \]
-又因为总时间
+三维情形 $\avg{v^2}=3\kBT/m$。以下为记号简单，只跟踪 $x$ 分量（一维），三维的差别在本节末统一说明。
+\begin{notebox}[title={平均的约定}]
+本章的 $\avg{\cdot}$ 一律指\textbf{对随机力（及相应系综）求平均}。凡写 $\avg{v(t)}$、$\avg{v^2(t)}$ 时，初速度 $v_0$ 暂时视为\textbf{给定值}，这是\textbf{条件平均}（“平均轨迹”）；若再把 $v_0$ 按其平衡分布平均（$\avg{v_0}=0$），则 $\avg{v(t)}$ 回到 $0$，与“各向同性 $\Rightarrow$ 平均速度为零”的静态结论一致。
+两者不矛盾，只是平均的层次不同：前者说“给定初速的粒子平均怎样衰减”，后者说“平衡态里平均下来是零”。
+\end{notebox}
+\subsection*{（二）随机游走：位移只按 $\sqrt t$ 增长}
+先把随机力的效果“离散化”看一遍。设粒子每经过一段平均时间就发生一次有效碰撞，每次碰撞使它获得一个方向随机、长度平均为 $\Delta$ 的位移——$\Delta$ 可以理解为“走过多远就被撞上”的平均路程。
+\begin{figure}[!htbp]
+\centering
+\begin{tikzpicture}[>=Latex,scale=1.1]
+  \coordinate (A) at (0.2,1.3);
+  \coordinate (B) at (1.5,1.8);
+  \coordinate (C) at (2.8,1.3);
+  \coordinate (D) at (3.4,2.6);
+  \coordinate (E) at (4.7,3.0);
+  \coordinate (F) at (5.8,2.3);
+  \draw[ink,thick] (A)--(B);
+  \draw[ink,thick] (B)--(C);
+  \draw[ink,thick] (C)--(D);
+  \draw[ink,thick] (D)--(E);
+  \draw[ink,thick] (E)--(F);
+  \node[above] at (0.85,1.60) {\scriptsize $\Delta$};
+  \node[right] at (3.14,1.95) {\scriptsize $\Delta$};
+  \node[above] at (5.25,2.70) {\scriptsize $\Delta$};
+  \foreach \p in {A,B,C,D,E,F} {\fill[sea] (\p) circle(2pt);}
+  \draw[->,gray] (0.0,-0.95)--(6.4,-0.95) node[right] {\small $x$};
+  \draw[dashed,gray] (0.2,1.3)--(0.2,-0.95);
+  \draw[dashed,gray] (5.8,2.3)--(5.8,-0.95);
+  \draw[<->,gray] (0.2,-0.55)--(5.8,-0.55) node[midway,below] {\scriptsize 总位移 $x$};
+\end{tikzpicture}
+\caption{随机游走：方向逐段无规，步长平均为 $\Delta$。总位移不是各段长度之和，而是“平方相加”。}
+\end{figure}
+设第 $k$ 步在 $x$ 方向上的位移为 $x_k$，走 $n$ 步（其间发生 $n-1$ 次碰撞）后
 \[
-t=n\tau,
+x=\sum_{k=1}^{n}x_k .
+\]
+各步等概率地取正、取负，故
+\[
+\avg{x}=\sum_{k=1}^{n}\avg{x_k}=0 .
+\]
+平方再平均：
+\[
+\avg{x^2}
+=\left\langle\Big(\sum_{k=1}^{n}x_k\Big)^2\right\rangle
+=\sum_{k=1}^{n}\avg{x_k^2}
++2\sum_{1\le i<j\le n}\avg{x_ix_j}.
+\]
+不同步之间彼此独立，$\avg{x_ix_j}=\avg{x_i}\avg{x_j}=0\ (i\neq j)$，于是
+\[
+\avg{x^2}=\sum_{k=1}^{n}\avg{x_k^2}=n\Delta^2 .
+\]
+（这里取 $\avg{x_k^2}=\Delta^2$：一维时 $x_k$ 就是该步的长度本身。三维时每一步在任一坐标轴上的投影均方只有 $\Delta^2/3$，故 $\avg{x^2}=n\Delta^2/3$，总位移的模方则是 $n\Delta^2$，见小节（六）末。）
+步数是时间除以平均碰撞时间，$n\propto t$，而 $\Delta$ 与 $t$ 无关，故
+\[
+\avg{x^2}=\frac{\Delta^2}{\tau}\,t\equiv\alpha t
+\qquad\Longrightarrow\qquad
+\boxed{\sqrt{\avg{x^2}}\propto\sqrt t} .
+\]
+\begin{notebox}
+对照一下匀速直线运动 $x=vt$：那是一个确定的方向，位移与时间成正比。随机游走没有确定方向，$n$ 步的位移只能按 $\sqrt n$ 增长——\textbf{走四倍的时间，只远两倍}。这正是扩散的“慢”的微观根源，也是 §3.3 中 $D\sim\frac13\bar v\bar\lambda$ 的来源：位移的平方随自由程步数线性增长。
+\end{notebox}
+\subsection*{（三）求解：初速度的遗忘}
+回到连续方程。记 $v=\dot x$、$f_0(t)$ 为随机力的 $x$ 分量，则
+\[
+\frac{\dd v}{\dd t}=-\beta v+f_0(t).
+\]
+由一阶线性方程的常数变易法，
+\[
+v(t)=v_0e^{-\beta t}
++\int_{0}^{t}f_0(\tau)\,e^{-\beta(t-\tau)}\dd\tau ,
+\qquad v_0=v(0).
+\]
+其中 $v_0e^{-\beta t}$ 是齐次方程的通解，积分项是非齐次方程的一个特解。后者的物理含义很清楚：
+对于时刻 $\tau<t$，物体在 $\dd\tau$ 内获得的速度增量为 $f_0(\tau)\dd\tau$；到 $t$ 时刻，这份“干扰”已经衰减为 $f_0(\tau)e^{-\beta(t-\tau)}\dd\tau$；把 $0$ 到 $t$ 的所有贡献加起来，就是积分项。
+对随机力求平均，$\avg{f_0}=0$，故
+\[
+\avg{v(t)}=v_0e^{-\beta t} .
+\]
+平均速度按时间常数
+\[
+\tau_{\rm rel}=\frac1\beta=\frac{m}{6\pi\eta a}
+\]
+指数式地忘掉初速度。注意 $v_0$ 是给定的初值，只对噪声求平均；若再对 $v_0$ 的平衡分布平均（$\avg{v_0}=0$），结果回到 $0$。
+\begin{center}
+\begin{tikzpicture}[>=Latex,scale=1]
+  \draw[->,thick] (0,0)--(0,4.05) node[above] {$v$};
+  \draw[->,thick] (0,0)--(7.6,0) node[right] {$t$};
+  \draw[sea,line width=1.4pt,domain=0:7.0,samples=140,smooth]
+    plot (\x,{3.5*exp(-0.55*\x)});
+  \draw[gold!85!black,line width=.8pt] plot coordinates {
+    (0,3.15)(0.18,3.6)(0.36,2.95)(0.54,3.3)(0.72,2.7)(0.9,2.95)
+    (1.08,2.35)(1.26,2.6)(1.44,2.1)(1.62,2.3)(1.8,1.9)(1.98,2.05)
+    (2.16,1.7)(2.4,1.85)(2.64,1.55)(2.88,1.65)(3.12,1.35)(3.36,1.5)
+    (3.6,1.2)(3.9,1.35)(4.2,1.05)(4.5,1.2)(4.8,0.95)(5.2,1.1)
+    (5.6,0.85)(6.0,1.0)(6.4,0.8)(7.0,0.9)};
+  \draw[dashed,gray] (1.82,0)--(1.82,{3.5*exp(-1)});
+  \node[below] at (1.82,0) {\scriptsize $1/\beta$};
+  \draw[sea,line width=1.4pt] (4.55,3.5)--(5.05,3.5);
+  \node[right,font=\scriptsize] at (5.05,3.5) {平均轨迹 $\avg{v(t)}$};
+  \draw[gold!85!black,line width=.8pt] (4.55,3.15)--(5.05,3.15);
+  \node[right,font=\scriptsize] at (5.05,3.15) {单条轨迹};
+\end{tikzpicture}
+\captionof{figure}{平均轨迹是干净的指数衰减，单条轨迹却在它周围不停地抖。前者只说明“初速度会忘掉”，后者才藏着温度。}
+\end{center}
+\begin{notebox}
+若把积分下限换成 $t_0\to-\infty$ 并丢掉 $v_0e^{-\beta t}$，就得到\textbf{平稳解}：粒子从无穷远的过去起就一直与噪声处于平衡，$\avg{v^2}$ 从一开始就是 $f_1^2/(2\beta)$。两种写法在 $t\gg1/\beta$ 之后完全一致，本节只用到后者。手稿即取这一写法。
+\end{notebox}
+\subsection*{（四）白噪声与 Dirac $\delta$ 函数}
+要算 $\avg{v^2}$，先要随机力的二阶统计。不同时刻的随机力相互独立（这样的随机力称为\textbf{白噪声}），故 $\tau_1\neq\tau_2$ 时
+\[
+\avg{f_0(\tau_1)f_0(\tau_2)}
+=\avg{f_0(\tau_1)}\avg{f_0(\tau_2)}=0 ;
+\]
+$\tau_1=\tau_2$ 时它取有限值 $\avg{f_0^2(\tau_1)}$。合起来写作
+\[
+\avg{f_0(\tau_1)f_0(\tau_2)}
+=\begin{cases}
+\avg{f_0^2(\tau_1)}, & \tau_1=\tau_2,\\[1mm]
+0, & \tau_1\neq\tau_2 .
+\end{cases}
+\]
+但这个“尖峰”宽为零、面积有限，不能用普通函数表示，需要引入 $\delta$ 函数。
+\textbf{Dirac $\delta$ 函数}
+\[
+\delta(x)=0\ (x\neq0),
+\qquad
+\int_{-\infty}^{+\infty}\delta(x)\,\dd x=1 .
+\]
+它的图像应理解为“宽度趋于零、面积恒为 $1$”的一族函数的极限（例如宽度 $\varepsilon\to0$ 的矩形或高斯）。由这两条立得下面唯一要用的性质——\textbf{筛选性}：
+\[
+\int_a^b f(x)\,\delta(x-x_0)\,\dd x=f(x_0),
+\qquad x_0\in(a,b).
+\]
+注意 $\delta$ 不是普通函数，$[\delta]=1/[x]$；因此白噪声
+\[
+\boxed{\avg{f_0(\tau_1)f_0(\tau_2)}=f_1^2\,\delta(\tau_1-\tau_2)}
+\]
+中的 $f_1^2$ 带有一个“时间”的量纲：$[f_1^2]=[f^2]\cdot\mathrm{s}=\mathrm{m^2\,s^{-3}}$，称为\textbf{噪声强度}。
+\begin{notebox}
+$\delta$ 相关是理想化。真实的相关函数有一个很小的宽度 $\tau_c$（量级为一次碰撞的持续时间），在 $|\tau_1-\tau_2|\lesssim\tau_c$ 内并不为零；只要 $\tau_c\ll1/\beta$（碰撞的“记忆”远短于速度的弛豫时间），取 $\delta$ 就足够好。说“$\tau_1=\tau_2$ 处力为无穷大”，意思是“相关时间趋于零、而同一时刻的方差有限”。
+\end{notebox}
+\subsection*{（五）$\avg{v^2(t)}$}
+把解平方后求平均。交叉项含 $\avg{f_0(\tau)}=0$，自动消失；只剩初值项与双积分：
+\[
+\avg{v^2(t)}
+=v_0^2e^{-2\beta t}
++\int_{0}^{t}\!\!\int_{0}^{t}
+e^{-\beta(2t-\tau_1-\tau_2)}
+\avg{f_0(\tau_1)f_0(\tau_2)}\,\dd\tau_1\dd\tau_2 .
+\]
+代入白噪声的相关函数，用筛选性把其中一个积分折掉：
+\[
+\int_{0}^{t}\!\!\int_{0}^{t}
+e^{-\beta(2t-\tau_1-\tau_2)}\delta(\tau_1-\tau_2)\,\dd\tau_1\dd\tau_2
+=\int_{0}^{t}e^{-2\beta(t-\tau)}\dd\tau
+=\frac{1-e^{-2\beta t}}{2\beta},
 \]
 故
 \[
-\avg{r^2}\propto t.
+\boxed{\avg{v^2(t)}=v_0^2e^{-2\beta t}+\frac{f_1^2}{2\beta}\left(1-e^{-2\beta t}\right)} .
 \]
-这正是扩散规律的微观来源。
-
-\subsection*{Langevin 方程}
-把布朗粒子的运动写为
+$t=0$ 时 $\avg{v^2}=v_0^2$；$t\gg1/\beta$ 时初值项消失、涨落项饱和：
 \[
-m\frac{\dd v}{\dd t}=-\zeta v+\xi(t),
+\avg{v^2}\longrightarrow\frac{f_1^2}{2\beta}.
 \]
-其中
-\begin{itemize}[leftmargin=2.2em]
-\item $-\zeta v$ 表示黏滞阻力；
-\item $\xi(t)$ 表示周围分子碰撞产生的随机力。
-\end{itemize}
-设
+平衡态的能量均分（一维）给出 $\avg{v^2}=\kBT/m$，两者相等即
 \[
-\avg{\xi(t)}=0,
-\qquad
-\avg{\xi(t)\xi(t')}=2\zeta\kb T\,\delta(t-t').
+\boxed{f_1^2=\frac{2\beta\kBT}{m}} .
 \]
-将方程写成
-\[
-\frac{\dd v}{\dd t}+\gamma v=f(t),
-\qquad
-\gamma=\frac{\zeta}{m},\quad f(t)=\frac{\xi(t)}{m}.
-\]
-乘以积分因子 $\ee^{\gamma t}$ 可得
-\[
-v(t)=v_0e^{-\gamma t}+\int_0^t e^{-\gamma(t-s)}f(s)\dd s.
-\]
-由此可算出
-\[
-\avg{v(t)}=\avg{v_0}\ee^{-\gamma t},
-\]
-并且
-\[
-\avg{v^2(t)}
-=
-\avg{v_0^2}\ee^{-2\gamma t}
-+\frac{\kb T}{m}\left(1-\ee^{-2\gamma t}\right).
-\]
-$t\to\infty$ 时，
-\[
-\avg{v^2}\to \frac{\kb T}{m},
-\]
-与一维能量均分定理一致：
-\[
-\frac12m\avg{v^2}=\frac12\kb T.
-\]
-
-
-\subsection*{随机力关联与二阶矩的完整计算}
-为与前面的记号一致，设
-\[
-\gamma=\zeta/m,\qquad f(t)=\xi(t)/m,\qquad
-\avg{f(t)}=0,\qquad\avg{f(t_1)f(t_2)}=A\delta(t_1-t_2).
-\]
-所谓白噪声并不是每一时刻取值都为普通意义的有限随机数，而是一个短相关时间噪声的理想化极限；这里仅使用 Dirac $\delta$ 的积分筛选性质
-$\int \delta(t-t_0)h(t)\dd t=h(t_0)$。
-初始速度与 $t>0$ 的随机力假定不相关。
-
-代入积分解，
-\[
-v(t)=v_0e^{-\gamma t}+
-\int_0^t e^{-\gamma(t-s)}f(s)\dd s,
-\]
-平方并取平均时需要\textbf{保留两个随机积分的交叉项}：
-\begin{align*}
-\avg{v^2(t)}
-&=\avg{v_0^2}e^{-2\gamma t}
-+2e^{-\gamma t}\int_0^t e^{-\gamma(t-s)}
-\avg{v_0f(s)}\dd s\\
-&\quad+\int_0^t\!\int_0^t e^{-\gamma(2t-s-s')}
-\avg{f(s)f(s')}\dd s\,\dd s'.
-\end{align*}
-中间项在上述独立性假设下为零。对双重积分应用相关函数：
-\[
-\begin{aligned}
-I&=A\int_0^t\!\int_0^t
-e^{-\gamma(2t-s-s')}\delta(s-s')\dd s'\dd s\\
-&=A\int_0^t e^{-2\gamma(t-s)}\dd s
-=\frac{A}{2\gamma}(1-e^{-2\gamma t}).
-\end{aligned}
-\]
-从而
-\[
-\boxed{\avg{v^2(t)}
-=\avg{v_0^2}e^{-2\gamma t}
-+\frac{A}{2\gamma}(1-e^{-2\gamma t}).}
-\]
-令 $t\to\infty$ 并利用一维能量均分
-$m\avg{v^2}/2=\kb T/2$，可反推出
-\[
-\frac{A}{2\gamma}=\frac{\kb T}{m},\qquad
-\boxed{A=\frac{2\gamma\kb T}{m}.}
-\]
-这就是阻尼与随机力强度之间的涨落--耗散关系。
-
-\subsection*{均方位移的微分方程解法}
-从 $\dot v=-\gamma v+f$ 和 $\dot x=v$ 出发，先推导
-\[
-\frac{\dd}{\dd t}\avg{x^2}=2\avg{xv}.
-\]
-对 $\avg{xv}$ 求导（加性理想白噪声，使用恰当的随机积分解释）：
-\[
-\frac{\dd}{\dd t}\avg{xv}=
-\avg{v^2}-\gamma\avg{xv}.
-\]
-若速度分布已经达到平衡，则 $\avg{v^2}=\kb T/m$，因此
-\[
-\frac12\frac{\dd^2}{\dd t^2}\avg{\Delta x^2}
-+\frac{\gamma}{2}\frac{\dd}{\dd t}\avg{\Delta x^2}
-=\frac{\kb T}{m}.
-\]
-设初始位移为零且 $\avg{\Delta x\,v}(0)=0$，解得
-\[
-\boxed{\avg{\Delta x^2(t)}
-=\frac{2\kb T}{m\gamma}
-\left[t-\frac{1-e^{-\gamma t}}{\gamma}\right].}
-\]
-$t\ll\gamma^{-1}$ 时作指数展开，得到弹道运动
-\[
-\avg{\Delta x^2}\simeq \frac{\kb T}{m}t^2;
-\]
-$t\gg\gamma^{-1}$ 时得到普通扩散规律
-\[
-\avg{\Delta x^2}\simeq 2Dt,\qquad
-\boxed{D=\frac{\kb T}{m\gamma}=\frac{\kb T}{\zeta}.}
-\]
-因而所强调的 $\avg{x^2}\propto t$ 仅是\textbf{长时间极限}，短时间不是这个规律。
-\begin{notebox}
-校订：推导中 $\delta(t_1-t_2)$ 表示两个\emph{时间变量}之间的相关，不应直接写成“不同时间的随机力乘积为零”，而是说不同时间点的相关函数在理想白噪声模型中仅在时间相同处具有 $\delta$ 支持。阻尼记号 $\gamma=\zeta/m$ 和单粒子速率等其它参数不可混用。
+\begin{notebox}[title={顺带一提：涨落--耗散}]
+阻尼强度 $\beta$ 与噪声强度 $f_1^2$ 不是两个可以独立选取的参数，比值被温度锁定：\textbf{涨落--耗散关系}。由此立刻得到 $D=\dfrac{\kBT}{m\beta}=\dfrac{\kBT}{\zeta}$（$\zeta=6\pi\eta a$），即 Einstein 关系——扩散与黏滞同源。若用真正的力 $F=mf_0$ 书写，它就是 $\avg{F(t)F(t')}=2\zeta\kBT\,\delta(t-t')$。
 \end{notebox}
-
-\subsection*{Einstein 扩散公式}
-把速度再对时间积分得位移，最终得到长时间极限下
+\subsection*{（六）$\avg{x^2(t)}$ 与 Einstein 扩散系数}
+最后求位移。把 Langevin 方程乘以 $x$ 并取平均。先做恒等式
 \[
-\avg{[x(t)-x(0)]^2}\simeq 2Dt,
+x\frac{\dd^2x}{\dd t^2}
+=\frac{\dd}{\dd t}\Big(x\frac{\dd x}{\dd t}\Big)-\Big(\frac{\dd x}{\dd t}\Big)^2,
 \]
-其中
+于是
 \[
-\boxed{D=\frac{\kb T}{\zeta}}.
+x\frac{\dd^2x}{\dd t^2}=-\beta x\frac{\dd x}{\dd t}+f_0x
+\;\Longrightarrow\;
+\frac{\dd}{\dd t}\Big(x\frac{\dd x}{\dd t}\Big)-\Big(\frac{\dd x}{\dd t}\Big)^2
+=-\frac{\beta}{2}\frac{\dd x^2}{\dd t}+f_0x,
 \]
-三维情况下
+即
 \[
-\boxed{\avg{|\vr(t)-\vr(0)|^2}=6Dt}.
+\frac12\frac{\dd^2x^2}{\dd t^2}-\Big(\frac{\dd x}{\dd t}\Big)^2
+=-\frac{\beta}{2}\frac{\dd x^2}{\dd t}+f_0x .
 \]
-若布朗粒子是半径为 $a$ 的小球，在黏度为 $\eta$ 的流体中满足 Stokes 阻力
+取平均。这里\textbf{不加证明地承认期望与微分可以换序}；又因当前随机力与当前位移无关（白噪声的 Itô 解释），$\avg{f_0x}=\avg{f_0}\avg{x}=0$。记 $\avg{({\dd x}/{\dd t})^2}=\avg{v^2}$，得
 \[
-\zeta=6\pi\eta a,
+\frac12\frac{\dd^2\avg{x^2}}{\dd t^2}-\avg{v^2}
+=-\frac{\beta}{2}\frac{\dd\avg{x^2}}{\dd t}
+\;\Longleftrightarrow\;
+\frac{\dd^2\avg{x^2}}{\dd t^2}
++\beta\frac{\dd\avg{x^2}}{\dd t}=2\avg{v^2}.
 \]
-则得到著名的 Stokes--Einstein 关系：
+（第二个等号是把全式乘以 $2$ 得到的——注意左右各项要一起乘，不能只乘前两项。）
+长时间后速度已弛豫到平衡值 $\avg{v^2}=\kBT/m$，于是一阶常系数方程
 \[
-\boxed{D=\frac{\kb T}{6\pi\eta a}}.
+\frac{\dd^2\avg{x^2}}{\dd t^2}
++\beta\frac{\dd\avg{x^2}}{\dd t}
+=\frac{2\kBT}{m}
 \]
-
+的通解为
+\[
+\avg{x^2}(t)
+=\frac{2\avg{v^2}}{\beta}\,t-\frac{C_1}{\beta}e^{-\beta t}+C_2
+=\frac{2\kBT}{m\beta}\,t-\frac{C_1}{\beta}e^{-\beta t}+C_2 .
+\]
+常数由初条件定：若 $t=0$ 时粒子位于原点并静止出发，$\avg{x^2}(0)=0$、$\frac{\dd}{\dd t}\avg{x^2}(0)=0$，则
+\[
+\avg{x^2}(t)=\frac{2\kBT}{m\beta}
+\left[t-\frac{1-e^{-\beta t}}{\beta}\right].
+\]
+$t\gg1/\beta$ 时指数项消失，得到
+\[
+\avg{x^2}=\frac{2\kBT}{m\beta}\,t .
+\]
+与随机游走得到的 $\avg{x^2}\propto t$ 一致。把 $m\beta=6\pi\eta a$ 代入：
+\[
+\frac{2\kBT}{m\beta}=\frac{\kBT}{3\pi\eta a}\equiv 2D,
+\qquad
+\boxed{D=\frac{\kBT}{6\pi\eta a}} .
+\]
+$D$ 称为 \textbf{Einstein 扩散系数}。别把 $\kBT/(3\pi\eta a)$ 当成 $D$——它是 $t$ 前面的系数，等于 $2D$。
+\begin{notebox}
+两种极限值得记住（就取上式）：
+\[
+t\ll\frac1\beta:\quad
+\avg{x^2}\simeq\frac{\kBT}{m}t^2
+\quad(\text{弹道段，像自由粒子}),
+\qquad
+t\gg\frac1\beta:\quad
+\avg{x^2}\simeq 2Dt
+\quad(\text{扩散段}).
+\]
+短时“按 $t^2$ 走”、长时“按 $t$ 走”，转折点正是速度的弛豫时间 $1/\beta$。三维情形把 $\avg{x^2}$ 换成 $\avg{r^2}$，长时结果为
+\[
+\avg{r^2}=6Dt=\frac{\kBT}{\pi\eta a}\,t ,
+\]
+每个直角分量各贡献 $2Dt$；$D=\kBT/(6\pi\eta a)$ 不变。
+\end{notebox}
+接下来讨论的 RC 电路部分不做考核要求。
 \subsection*{RC 电路的类比}
 RC 电路也可以说明热噪声问题。设电容器带电量为 $q$，则回路方程可写为
 \[
