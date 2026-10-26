@@ -33,6 +33,8 @@ subsection={format=\large\bfseries\color{ink}}
 \newcommand{\vu}{\bm{u}}
 \newcommand{\vv}{\bm{v}}
 \newcommand{\vr}{\bm{r}}
+\newcommand{\kBT}{k_{\mathrm B}T}
+
 
 \newtcolorbox{keybox}[1][]{
 colback=soft,colframe=sea!70!black,arc=1.2mm,boxrule=.6pt,
@@ -1107,245 +1109,487 @@ $4^2=16$、$\binom{5}{2}=10$、$\binom{4}{2}=6$。
 %===========================
 \chapter{近平衡态中的输运过程}
 
+在平衡态的系统中，压强 $p$、温度 $T$、数密度 $n$ 与平均速度 $\avg{\vv}$ 处处相等；严格地说，这要求系统不受外场作用（有重力场时 $p$、$n$ 随高度变化，而 $T$ 仍均匀）。系统偏离平衡态时，会出现动量、能量或物质的净传递；在孤立系统中，正是这些传递使系统由非平衡态重新移向平衡态，这一过程称为\textbf{输运过程}。
+
+本章只讨论\textbf{近平衡态}：系统虽已不均匀，但偏离平衡不远，各处仍有确定的 $p$、$T$、$n$，宏观量只在空间上缓慢变化。于是可以把“通量”写成“梯度”的线性响应——这正是三个输运定律的共同结构。
+
+
 \section{输运现象及其宏观规律}
-处于平衡态的系统，宏观量在空间上均匀，不存在净流。当系统略微偏离平衡态时，各种不均匀性会在微观随机运动的作用下逐渐被抹平，这就是输运过程。最常见的有三类：
 
-\subsection*{1. 扩散}
-当粒子数密度 $n$ 在空间上不均匀时，会出现粒子从高密度区域向低密度区域的净迁移。Fick 定律写成
+我们先介绍三类典型输运现象，分别对应三种“不均匀”：
+\begin{itemize}[leftmargin=2.2em]
+\item 数密度 $n$ 不均匀 $\Rightarrow$ \textbf{扩散}（物质输运）；
+\item 温度 $T$ 不均匀 $\Rightarrow$ \textbf{热传导}（能量输运）；
+\item 流速 $u$ 不均匀 $\Rightarrow$ \textbf{黏滞}（动量输运）。
+\end{itemize}
+三者的宏观规律形状相同：
 \[
-\boxed{\bm j_n=-D\nabla n},
+\text{通量}=-\,(\text{输运系数})\times(\text{相应宏观量的梯度}).
 \]
-其中 $\bm j_n$ 是粒子数流密度，$D$ 是扩散系数。
 
-\subsection*{2. 热传导}
-当温度分布不均匀时，热量将自发地从高温处流向低温处。Fourier 定律写成
-\[
-\boxed{\bm j_Q=-\kappa \nabla T},
-\]
-其中 $\bm j_Q$ 是热流密度，$\kappa$ 是热导率。
-
-\subsection*{3. 黏滞}
-流体各处速度不同，会因分子交换动量而产生内摩擦效应。对于沿 $x$ 方向流动、速度沿 $y$ 方向变化的简单剪切流，
-\[
-\boxed{\tau_{xy}=\eta \pp{u_x}{y}},
-\]
-其中 $\eta$ 是黏滞系数，$\tau_{xy}$ 表示单位面积上的切向应力。
+\subsection*{（一）扩散现象及其宏观规律}
 
 \begin{center}
-\begin{tikzpicture}[>=Latex]
-\draw[thick] (0,0) rectangle (8,3.2);
-\foreach \y/\len in {0.45/1.8,0.95/2.5,1.45/3.3,1.95/4.3,2.45/5.6,2.95/6.8}
-  \draw[->,sea,thick] (0.6,\y) -- ++(\len,0);
-\node[right] at (7.8,2.95) {$u=u(y)$};
-\node[above] at (4.0,3.2) {速度梯度导致黏滞应力};
-\draw[->] (8.6,0.2)--(8.6,3.1) node[above] {$y$};
+\begin{tikzpicture}[>=Latex,scale=1]
+  \draw[ink,thick] (0,0) rectangle (7,2.8);
+  \draw[ink,thick,dashed] (3.4,0)--(3.4,2.8);
+  \foreach \x/\y in {0.35/2.4,0.75/2.0,0.5/1.55,1.05/1.1,0.4/0.6,1.3/0.4,2.0/2.2,2.45/1.75,2.1/0.9,2.7/0.5,3.0/1.4,1.7/1.3,0.9/1.9,2.9/2.4}
+    {\fill[sea] (\x,\y) circle(1.8pt);}
+  \foreach \x/\y in {4.3/2.3,4.9/1.9,5.7/2.4,6.3/1.7,5.1/1.0,6.0/0.7,6.5/1.3,4.5/0.5,5.5/1.6}
+    {\fill[sea] (\x,\y) circle(1.8pt);}
+  \draw[->,line width=1.4pt,gold!80!black] (1.0,1.4)--(3.2,1.4);
+  \node[below] at (1.3,-0.28) {$n_A$};
+  \node[below] at (5.2,-0.28) {$n_B$};
+  \node[below] at (3.4,-0.28) {$\nabla n\neq0$};
+  \node[above] at (3.5,3.0) {粒子由密处向疏处净迁移};
 \end{tikzpicture}
+\captionof{figure}{扩散：数密度不均匀引起的粒子净流。}
 \end{center}
 
+取 $x$ 方向为密度变化方向，记
+\[
+\nabla n=\frac{\dd n}{\dd x},
+\qquad
+\frac{\dd N}{\dd t}=-DA\nabla n,
+\]
+其中 $A$ 是所考察的截面面积，$\dd N/\dd t$ 是单位时间净穿过该面的粒子数。
 
-\subsection*{题目：内部均匀产热的球体}
-问：为什么温度高于 \(\SI{37}{\celsius}\) 的体内环境可能仍有益于热量向外散出？其简化模型是半径 $R$、热导率 $\kappa$ 恒定且\textbf{内部单位体积均匀产热} $a$ 的球体，表面温度固定为 $T_0$。不应把它替换成没有体积热源的球壳问题。
+定义\textbf{粒子流密度}
+\[
+j_n=\frac{\Delta N}{A\,\Delta t},
+\]
+即单位时间、单位面积上扩散过去的粒子数。于是 Fick 扩散定律写成
+\[
+\boxed{j_n=-D\frac{\dd n}{\dd z}},
+\]
+$D$ 称为\textbf{扩散系数}（同种分子互扩散时也叫自扩散系数），单位为 $\mathrm{m^2/s}$。
+
+\subsection*{（二）热传导现象及其宏观规律}
+
+\begin{center}
+\begin{tikzpicture}[>=Latex,scale=1]
+  \draw[ink,thick,fill=lightgray] (0,0.9) rectangle (7.4,2.0);
+  \draw[->,line width=1.4pt,sea] (0.9,1.45)--(6.9,1.45);
+  \fill[gold!85] (0.67,0.9) .. controls (0.40,0.62) and (0.42,0.30) .. (0.67,0.06)
+    .. controls (0.92,0.30) and (0.94,0.62) .. (0.67,0.9);
+  \fill[gold!45] (0.67,0.84) .. controls (0.55,0.64) and (0.57,0.40) .. (0.67,0.28)
+    .. controls (0.77,0.40) and (0.79,0.64) .. (0.67,0.84);
+  \node[right] at (7.5,1.45) {\small 能量输运};
+  \node[above] at (3.7,2.05) {\small 高温端 $\to$ 低温端};
+\end{tikzpicture}
+\captionof{figure}{热传导：温度不均匀引起的能量净输运。}
+\end{center}
+
+定义\textbf{热流}
+\[
+\Phi=\frac{\Delta Q}{\Delta t},
+\]
+即单位时间通过某一面积的热量。对面积为 $\Delta S$ 的截面，Fourier 热传导定律写成
+\[
+\boxed{\Phi=-\kappa\frac{\dd T}{\dd z}\,\Delta S},
+\qquad
+\frac{\dd Q}{\dd t}=-\kappa A\,\nabla T,
+\]
+其中 $\kappa$ 为\textbf{热导率}，单位为 $\mathrm{W/(m\cdot K)}$。负号表示热量沿温度降低的方向流动。
+
+\subsection*{（三）黏滞性现象及其宏观规律}
+
+\begin{center}
+\begin{tikzpicture}[>=Latex,scale=1]
+  \draw[->,thick] (0,0)--(0,5.0) node[above] {$z$};
+  \fill[pattern=north east lines] (0,-0.3) rectangle (7.2,0);
+  \draw[ink,thick] (0,0)--(7.2,0);
+  \foreach \y/\l in {0.5/1.0,1.0/1.8,1.5/2.6,2.0/3.3,2.5/4.0,3.0/4.7,3.5/5.4,4.0/6.1}
+    {\draw[dashed,gray!60] (0.1,\y)--(7.2,\y);
+     \draw[->,sea,line width=1.1pt] (0.35,\y)--++(\l,0);}
+  \node[above] at (2.6,4.55) {\small 河面};
+  \draw[->,gray] (2.6,4.45)--(2.6,4.10);
+  \node[right] at (7.3,4.0) {\small $v=u_{\max}$};
+  \node[right] at (7.3,0.0) {\small $v=0$};
+  \node[rotate=90] at (-0.62,1.4) {\small $\dfrac{\dd u_x}{\dd z}$};
+  \draw[->,gray] (-0.9,2.2)--(-0.9,3.6);
+\end{tikzpicture}
+\captionof{figure}{黏滞：各层流速不同，分子跨层交换动量，宏观上表现为层间相互拖曳的内摩擦。}
+\end{center}
+
+不同层的水流之间彼此拖曳：快层把 $x$ 向动量带给慢层，慢层反之。对法向沿 $z$ 的剪切流，动量输运率为
+\[
+\boxed{\frac{\dd P}{\dd t}=-\eta A\,\nabla v},
+\qquad
+f=-\eta A\frac{\dd u}{\dd z}\quad(\text{黏滞力}),
+\]
+$\eta$ 称为\textbf{黏滞系数}（动力黏度），单位为 $\mathrm{Pa\cdot s}$。
+
+\subsection*{例题：内部均匀产热的球体}
+
+\textbf{问：}为什么夏天外界温度高于 $\SI{37}{\celsius}$，人体仍能通过脱衣散热？\\
+我们先把人体简化为各向同性的球体：假设半径 $R$，热导率 $\kappa$ 处处相同，内部\textbf{单位体积的产热率}处处相等，
+\[
+\frac{\dd Q}{\dd V\,\dd t}=a,
+\]
+表面温度固定为 $T_0$。
+
+\begin{center}
+\begin{tikzpicture}[>=Latex,scale=1]
+  \shade[inner color=gold!38,outer color=sea!12] (0,0) circle(1.6);
+  \draw[ink,thick] (0,0) circle(1.6);
+  \draw[ink,dashed] (0,0) circle(0.8);
+  \draw[->,sea,thick] (0,0)--(1.6,0) node[midway,above] {$r$};
+  \fill[ink] (0,0) circle(1.5pt);
+  \node[right] at (1.62,0) {$R$};
+  \node[below] at (0,-1.85) {\small 均匀产热 $a$};
+  \node[left] at (-1.68,-1.2) {$T_0$};
+\end{tikzpicture}
+\end{center}
 
 半径 $r$ 以内的总产热功率为
 \[
-\dot Q_{\rm gen}(r)=a\frac{4\pi r^3}{3}.
+\frac{\dd Q}{\dd t}=\frac{\dd Q}{\dd V\,\dd t}\,V=\frac43\pi r^3 a,
 \]
-稳态能量守恒要求它恰好等于穿过半径 $r$ 球面的向外热流功率，结合 Fourier 定律：
+而稳态时它必须等于穿过半径 $r$ 球面向外流出的热流，由 Fourier 定律（面积 $A=4\pi r^2$）
 \[
-a\frac{4\pi r^3}{3}=-4\pi r^2\kappa\frac{\dd T}{\dd r}.
+\frac{\dd Q}{\dd t}=-\kappa A\frac{\dd T}{\dd r}=-4\pi r^2\kappa\frac{\dd T}{\dd r}.
 \]
-约去共同因子，得到
+两式相等：
 \[
-\frac{\dd T}{\dd r}=-\frac{a}{3\kappa}r,\quad
-T(r)=-\frac{a}{6\kappa}r^2+C.
+\frac43\pi r^3a=-4\pi r^2\kappa\frac{\dd T}{\dd r}
+\;\Longrightarrow\;
+\frac{\dd T}{\dd r}=-\frac{a}{3\kappa}r,
+\]
+积分得
+\[
+T(r)=-\frac{a}{6\kappa}r^2+C .
 \]
 代入边界条件 $T(R)=T_0$：
 \[
-\boxed{T(r)=T_0+\frac{a}{6\kappa}(R^2-r^2).}
+\boxed{T(r)=T_0+\frac{a}{6\kappa}\left(R^2-r^2\right)}.
 \]
-因此中心温度 $T(0)=T_0+aR^2/(6\kappa)$ 高于表面，中心处由于对称性温度梯度为零。这是\emph{均匀体积产热}造成的温度分布；无源球壳稳态结果 $T=C_1+C_2/r$ 不能直接用于本题。
-
-\begin{center}
-\begin{tikzpicture}[>=Latex]
-\shade[inner color=gold!38,outer color=sea!12] (0,0) circle(1.7);
-\draw[ink,thick] (0,0) circle(1.7);
-\draw[->,sea,thick] (0,0)--(1.7,0) node[midway,above] {$r$};
-\draw[->,gold,thick] (1.1,1.1)--(1.85,1.85);
-\draw[->,gold,thick] (-1.1,1.1)--(-1.85,1.85);
-\node at (0,-.55){内部产热 $a$};
-\node[right] at (1.72,-.8){边界 $T(R)=T_0$};
-\end{tikzpicture}
-\end{center}
-\section{气体分子的碰撞过程及其概率分布}
-讨论平均自由程、相对速度以及自由程分布。
-
-\subsection*{平均自由程的几何估计}
-若把气体分子近似看作直径为 $d$ 的硬球，则两个分子发生碰撞相当于一中心分子扫出截面积
+可见 \(T(0)>T_0\)，即
 \[
-\sigma=\pi d^2
+T(0)=T_0+\frac{aR^2}{6\kappa}>T_0,
 \]
-的碰撞圆柱。若其他分子暂且视为静止，数密度为 $n$，则分子走过长度 $\ell$ 时，扫过体积为
-\[
-\sigma \ell
-\]
-其中平均含有 $n\sigma \ell$ 个分子，因此平均自由程量级为
-\[
-\lambda\sim\frac{1}{n\sigma}.
-\]
-更精确地考虑到所有分子都在运动，平均相对速度引入一个 $\sqrt2$ 因子，故
-\[
-\boxed{
-\lambda=\frac{1}{\sqrt2\,n\sigma}
-=\frac{1}{\sqrt2\,\pi d^2n}
-}.
-\]
-利用 $p=n\kb T$ 还可写成
-\[
-\boxed{\lambda=\frac{\kb T}{\sqrt2\,\pi d^2p}}.
-\]
-
-\subsection*{相对速度分布}
-若两粒子速度分别为 $\vv_1,\vv_2$，定义相对速度
-\[
-\vu=\vv_1-\vv_2.
-\]
-注意：由于两粒子的速度都服从 Maxwell 分布，因此相对速度也服从 Maxwell 型分布，只不过其中的质量应由约化质量替代。对于同种分子，最终仍可写成
-\[
-f(u)\propto u^2\exp\left(-\frac{mu^2}{4\kb T}\right).
-\]
-这使得我们能进一步计算平均相对速率。
-
-
-\subsection*{相对速率积分、碰撞率与 $\sqrt2$ 因子}
-对同种 Maxwell 气体的两个独立分子，速度分量均为方差 $\kb T/m$ 的正态分布。
-相对速度分量 $u_x=v_{1x}-v_{2x}$ 的方差为 $2\kb T/m$，三维速率概率密度为
-\[
-f_u(u)=4\pi\left(\frac{m}{4\pi\kb T}\right)^{3/2}
-u^2 e^{-mu^2/(4\kb T)}.
-\]
-计算均值：
-\[
-\begin{aligned}
-\avg{u}
-&=4\pi\left(\frac m{4\pi\kb T}\right)^{3/2}
-\int_0^\infty u^3e^{-mu^2/(4\kb T)}\dd u\\
-&=\sqrt{\frac{16\kb T}{\pi m}}
-=\sqrt2\,\avg v.
-\end{aligned}
-\]
-故一粒子的平均碰撞频率 $z=n\sigma\avg{u}$，平均自由时间
-$\tau=1/z$，利用 $\lambda=\avg v\,\tau$ 得
-\[
-\boxed{\lambda=\frac{\avg v}{n\sigma\avg u}
-=\frac1{\sqrt2\,n\sigma}.}
-\]
-这是稀薄同种硬球气体、分子碰撞不相关等假设下的公式。
-
-\subsection*{自由程的指数分布}
-设分子在走过无穷小长度 $\dd \ell$ 的过程中发生碰撞的概率正比于 $\dd \ell$：
-\[
-P(\text{在 }\dd\ell\text{ 内碰撞})=\frac{\dd\ell}{\lambda}.
-\]
-记 $P_0(\ell)$ 表示走到距离 $\ell$ 仍未碰撞的概率，则
-\[
-P_0(\ell+\dd\ell)=P_0(\ell)\left(1-\frac{\dd\ell}{\lambda}\right).
-\]
-于是
-\[
-\frac{\dd P_0}{\dd\ell}=-\frac{P_0}{\lambda},
-\qquad P_0(0)=1.
-\]
-解得
-\[
-P_0(\ell)=e^{-\ell/\lambda}.
-\]
-因此首次碰撞发生在区间 $[\ell,\ell+\dd\ell]$ 的概率密度为
-\[
-f(\ell)\dd\ell
-=
--\dd P_0(\ell)
-=
-\frac1\lambda e^{-\ell/\lambda}\dd\ell.
-\]
-所以
-\[
-\boxed{f(\ell)=\frac1\lambda e^{-\ell/\lambda}},\qquad \ell\ge0.
-\]
-并且
-\[
-\avg{\ell}=\int_0^\infty \ell f(\ell)\dd\ell=\lambda.
-\]
+\textbf{核心温度必高于外界温度}。因此即使外界高于体温，体内仍存在由内向外、沿半径方向递减的温度分布，热量照样可以导出——这正是“脱衣散热”的物理内容。
 
 \begin{notebox}
-在这里实际上给出了一个非常典型的“等待时间/等待路程”的指数分布例子。它的前提是假定碰撞是独立、稀薄且均匀的，因此不适用于高密度液体或强关联系统。
+本题的关键是\textbf{均匀体积产热}：产热率正比于体积（$\propto r^3$），散热面积正比于面积（$\propto r^2$），故温度梯度必须在 $r=0$ 处为零。若误用“无源球壳”的稳态解 $T=C_1+C_2/r$，会得到完全不同的（且不符合对称性的）结果。
 \end{notebox}
 
+
+\section{气体分子的碰撞及其概率分布}
+
+\subsection*{一个具有启发性但错误的扩散分析}
+
+先看一个“看起来合理”却必然失败的推导。设
+\[
+\frac{\dd n}{\dd z}=\text{const}\ (\text{记为 }\gamma),
+\qquad
+n(z)=n_0+\gamma r\cos\theta .
+\]
+考虑在 $\Delta t$ 内能到达面积 $A$ 的分子，按球坐标写出
+\[
+\Delta n=\int_0^{u\Delta t}\!\!\dd r\iint
+\underbrace{\left(\frac{A\cos\theta}{4\pi r^2}\right)}_{\text{立体角}}
+\underbrace{\left(r^2\sin\theta\,\dd\theta\,\dd\varphi\right)}_{\text{体元}}
+\underbrace{\left(f(u)u^2\,4\pi\,\dd u\right)}_{\text{速率分布}}
+n(z).
+\]
+这里出现两个 $\Delta t$：一是“能到达 $A$ 的分子数 $\propto u\Delta t$”，二是“这些分子所携带的量与 $A$ 处之差 $\propto(\dd g/\dd z)\,u\Delta t$”。两者相乘并对 $r$ 积分，得到
+\[
+\Delta n\propto(\Delta t)^2
+\;\Longrightarrow\;
+\lim_{\Delta t\to0}\frac{\Delta N}{\Delta t}\propto\Delta t\to0 .
+\]
+
+\begin{notebox}[title={结论：$\Delta t\to0$ 时无输运，与实际不符！}]
+这个推导错在三处：
+\begin{enumerate}[leftmargin=1.8em,itemsep=1pt]
+\item \textbf{特征距离取错}。分子携带的是\textbf{最后一次碰撞处}的宏观量，那个距离的典型尺度是平均自由程 $\bar\lambda$，而不是 $u\Delta t$。$\Delta t\to0$ 时 $u\Delta t\to0$，等于说“分子一步都没走过”，自然没有输运。
+\item \textbf{密度取值取错}。应取 $n(z-\bar\lambda\cos\theta)$ 并对 $\bar\lambda$ 的分布求平均，而不是直接取到达点的 $n(z)$。
+\item \textbf{极限取错}。真实的通量是有限的，$j_n\propto\dd n/\dd z$ 与 $\Delta t$ 无关。只要把“距离”换成 $\bar\lambda$ 的指数分布，$\Delta t$ 就整体约掉，得到 Fick 定律。
+\end{enumerate}
+正确的做法见 §3.3：先求“最后一次碰撞距离”的分布，再对分子通量积分。
+\end{notebox}
+
+\subsection*{碰撞截面}
+
+\begin{center}
+\begin{tikzpicture}[>=Latex,scale=1]
+  % 靶分子（分子 2）
+  \draw[ink,thick,fill=soft] (0,0) circle(0.62);
+  \fill[ink] (0,0) circle(1pt);
+  \draw[<->,thick] (0,0.62)--(0,-0.62) node[midway,right] {\scriptsize $d_2$};
+  % 入射分子（分子 1）
+  \draw[ink,thick,fill=soft] (-2.6,1.5) circle(0.5);
+  \fill[ink] (-2.6,1.5) circle(1pt);
+  \draw[<->,thick] (-2.6,2.0)--(-2.6,1.0) node[midway,left] {\scriptsize $d_1$};
+  % 两条直线轨迹
+  \draw[gray!70,dashed] (-3.5,1.5)--(1.4,1.5);
+  \draw[gray!70,dashed] (-1.4,0)--(1.4,0);
+  % 碰撞截面：半径 (d1+d2)/2 的圆及其切线
+  \draw[red!75!black,dashed,line width=1pt] (0,0) circle(1.12);
+  \draw[red!75!black,line width=.8pt] (-3.1,1.12)--(1.3,1.12);
+  \draw[red!75!black,line width=.8pt] (-3.1,-1.12)--(1.3,-1.12);
+  % 碰撞参数 b
+  \draw[<->,thick] (1.8,0)--(1.8,1.5) node[midway,right] {$b$};
+  \node[red!75!black,below] at (-0.6,-1.12) {\scriptsize 红色虚线圆：半径 $\dfrac{d_1+d_2}{2}$};
+\end{tikzpicture}
+\end{center}
+
+两分子（直径分别为 $d_1$、$d_2$）沿相距 $b$ 的直线相向运动。由几何可见：当
+\[
+b<\frac{d_1+d_2}{2}
+\]
+时两球相碰。于是把分子 2 看作静止时，分子 1 的“靶”是以 $d_1+d_2$ 为直径的圆，其面积
+\[
+\boxed{\sigma=\frac{\pi}{4}\left(d_1+d_2\right)^2}
+\qquad
+\xrightarrow{\ d_1=d_2=d\ }\
+\boxed{\sigma=\pi d^2}
+\]
+称为\textbf{碰撞截面}。
+
+\subsection*{平均自由程与平均碰撞频率}
+
+\begin{center}
+\begin{tikzpicture}[>=Latex,scale=1]
+  \coordinate (A) at (0,1.2);
+  \coordinate (B) at (2.1,2.6);
+  \coordinate (C) at (3.4,0.7);
+  \coordinate (D) at (5.4,2.0);
+  \draw[ink,thick] (A)--(B) node[midway,above,sloped] {\scriptsize $\bar\lambda$};
+  \draw[ink,thick] (B)--(C) node[midway,below,sloped] {\scriptsize $\bar\lambda$};
+  \draw[ink,thick] (C)--(D) node[midway,above,sloped] {\scriptsize $\bar\lambda$};
+  \foreach \p in {A,B,C,D} {\fill[sea] (\p) circle(2pt);}
+\end{tikzpicture}
+\captionof{figure}{分子的折线轨迹：两次碰撞之间走过的路程即自由程。}
+\end{center}
+
+\textbf{自由程}指分子在相继两次碰撞之间走过的路程。大量分子的平均值就是\textbf{平均自由程} $\bar\lambda$；相应地，设平均碰撞频率为 $\bar z$，平均自由时间为 $\bar\tau$，则
+\[
+\boxed{\bar\lambda=\bar v\,\bar\tau},
+\qquad
+\boxed{\bar\tau=\frac{1}{\bar z}} .
+\]
+注意 $\bar v$ 是分子\textbf{自身}的平均速率，不要与上一节的相对速率 $\bar u$ 混淆：碰撞频率由相对速率决定，而“两次碰撞之间走了多远”由自身速率计。
+
+\begin{center}
+\begin{tikzpicture}[>=Latex,scale=1]
+  \draw[ink,thick] (0,0.55)--(6.6,0.55);
+  \draw[ink,thick] (0,1.45)--(6.6,1.45);
+  \draw[ink,thick,fill=soft] (0,0.35) ellipse (0.22 and 0.72);
+  \draw[ink,thick,fill=soft] (6.6,0.35) ellipse (0.22 and 0.72);
+  \foreach \x/\y in {1.2/1.0,2.6/1.05,3.7/0.85,4.9/1.1}
+    {\draw[ink,thick] (\x,\y) circle(0.16);}
+  \draw[<->,thick] (0,1.85)--(6.6,1.85) node[midway,above] {$\Delta L=\bar u\,\Delta t$};
+  \node[right] at (6.9,0.35) {\small $\sigma$};
+\end{tikzpicture}
+\captionof{figure}{碰撞圆柱：分子扫过的体积为 $\sigma\Delta L$，其中平均有 $n\sigma\Delta L$ 个分子。}
+\end{center}
+
+分子以相对速率 $\bar u$ 前进 $\Delta t$ 时，扫过截面积 $\sigma$、长 $\Delta L$ 的圆柱，体内分子数为 $n\sigma\Delta L$，故
+\[
+z=\frac{\Delta N}{\Delta t}
+=n\frac{A\,\Delta L}{\Delta t}
+=n\sigma\frac{\Delta L}{\Delta t}
+=n\sigma\bar u .
+\]
+代入相对平均速率 $\bar u=\sqrt2\,\bar v$ 及 $\sigma=\pi d^2$，得
+\[
+\bar z=\sqrt2\,\sigma\bar v\,n
+=\sqrt2\,\pi d^2\,\bar v\,\frac{p}{\kBT},
+\]
+其中 $\bar v=\sqrt{8\kBT/(\pi m)}$ 是 Maxwell 分布的平均速率。代入后
+\[
+\boxed{\bar z=4d^2p\sqrt{\frac{\pi}{\kBT m}}},
+\qquad
+\boxed{\bar\lambda=\frac{1}{\sqrt2\,n\sigma}
+=\frac{\kBT}{\sqrt2\,p\,\sigma}} .
+\]
+
+\subsection*{数量级估计}
+
+取空气的典型值 $d\approx\SI{0.3}{nm}$、$T\approx\SI{300}{K}$、$p\approx\SI{1e5}{Pa}$：
+\[
+\bar\lambda\approx10^{-7}\ \mathrm m,\qquad \bar z\sim10^{9}\ \mathrm{s^{-1}} .
+\]
+可见常温常压下，分子每秒碰撞约十亿次，而两次碰撞之间只走约 $0.1\ \mu\mathrm m$——约为人头发丝直径的千分之一。
+
+再把压强降到 $p=\SI{0.1}{Pa}$：
+\[
+\bar\lambda\approx\SI{0.1}{m},
+\]
+与容器、泵口的尺寸同量级。
+
+\begin{notebox}
+$\bar\lambda\propto1/p$ 是“抽真空”的物理基础：气压降两个量级，自由程升两个量级。当 $\bar\lambda$ 大到与装置尺寸可以比拟时，气体已进入\textbf{自由分子流}区，分子之间几乎不碰撞、直接飞向泵口，连续介质（黏性流）图像失效，抽速转而由管道的几何流导决定。
+\end{notebox}
+
+
 \section{气体输运现象的微观解释}
-利用平均自由程的思想，可以对扩散、黏滞和热传导系数给出数量级估计。
 
-\subsection*{扩散系数}
-设平均热速率为 $\bar v$，平均碰撞时间为
-\[
-\tau\sim \frac{\lambda}{\bar v}.
-\]
-在随机游走近似下，扩散系数的量级是
-\[
-\boxed{D\sim \frac13\bar v\lambda}.
-\]
+\begin{center}
+\begin{tikzpicture}[>=Latex,scale=1.2]
+  \draw[->,thick] (0,0)--(0,4.2) node[above] {$z$};
+  \draw[->,thick] (0,0)--(4.8,0) node[right] {$y$};
+  \draw[->,thick] (0,0)--(-1.8,-1.4) node[below left] {$x$};
+  
+  \fill[soft] (-0.75,-0.42)--(0.75,-0.20)--(1.0,0.30)--(-0.50,0.08)--cycle;
+  \draw[ink,thick] (-0.75,-0.42)--(0.75,-0.20)--(1.0,0.30)--(-0.50,0.08)--cycle;
+  \node[below right] at (1.0,-0.20) {\small \(A\)};
+  
+  \coordinate (P) at (2.0,3.2);
+  \fill[gold!80!black] (P) circle(2pt);
+  
+  \draw[dashed,gray!80] (0,0)--(0,3.2);
+  \draw[->,thick,gray!65] (0,0)--(P) node[midway, above left] {\(r\)};
+  
+  \draw[gray,thick] (0,1.2) arc (90:58:1.2);
+  \node[gray] at (0.35,1.45) {\small \(\theta\)};
 
-\subsection*{黏滞系数}
-以简单剪切流为例，穿过某个平面的分子平均携带距该平面约一自由程处的流动动量，从而造成切向动量通量。数量级分析给出
+  \draw[dashed,sea!80] (2.0,3.2)--(0,3.2) node[midway, above] {\(r\cos\theta\)};
+  
+  \node[right] at (P) {\small 最后一次碰撞处};
+  \node[left] at (-0.2,4.0) {\small \(\dfrac{\dd g}{\dd z}\neq0\)};
+\end{tikzpicture}
+\captionof{figure}{输运的微观图像：穿过 \(A\) 的分子，其“最后一次碰撞”发生在距 \(A\) 约一个自由程处。}
+\end{center}
+
+设某个宏观量 $g$（可以是动量、能量、粒子数）沿 $z$ 方向有梯度。分子要穿过面积 $A$，其“最后一次碰撞”发生在 $A$ 上方（或下方）约 $\bar\lambda$ 处。
+
+\subsection*{最后一次碰撞距离的分布}
+
+由 §3.2 的指数分布，分子在 $r\sim r+\dd r$ 内发生最后一次碰撞的概率为
 \[
-\boxed{\eta\sim \frac13\rho\bar v\lambda},
+\frac{1}{\bar\lambda}e^{-r/\bar\lambda}\,\dd r .
+\]
+在该处，$g$ 与 $A$ 处的差为
+\[
+\Delta g=\frac{\dd g}{\dd z}\,r\cos\theta,
+\]
+取平均：
+\[
+\avg{\Delta g}
+=\int_0^{+\infty}\frac{1}{\bar\lambda}e^{-r/\bar\lambda}\frac{\dd g}{\dd z}r\cos\theta\,\dd r
+=\frac{\dd g}{\dd z}\,\bar\lambda\cos\theta .
+\]
+$\bar\lambda\cos\theta$ 正是“沿 $z$ 的有效位移”：斜着来的分子，携带的信息只按投影计入。
+
+\subsection*{穿过平面的输运通量}
+
+单位时间穿过 $A$、速率在 $v\sim v+\dd v$、方向在 $\dd\Omega$ 内的分子数为
+\[
+\dd\dot N=n\,A\,v\cos\theta\,f(v)\,\dd v\,\frac{\dd\Omega}{4\pi}.
+\]
+每个分子平均携带 $\avg{\Delta g}=\dfrac{\dd g}{\dd z}\bar\lambda\cos\theta$，故单侧（例如自下而上）的通量为
+\[
+\begin{aligned}
+\dot G_{\text{单侧}}
+&=\int_0^{\infty}\!\!\dd v\int_{\text{半球}}\!\!\dd\Omega\;
+nAv\cos\theta f(v)\frac{1}{4\pi}\frac{\dd g}{\dd z}\bar\lambda\cos\theta\\
+&=nA\frac{\dd g}{\dd z}\bar\lambda\cdot
+\underbrace{\frac{1}{4\pi}\int_{\text{半球}}\cos^2\theta\,\dd\Omega}_{=\,1/6}
+\cdot\underbrace{\int_0^\infty vf(v)\,\dd v}_{=\,\bar v}
+=\frac16 nA\bar v\bar\lambda\frac{\dd g}{\dd z}.
+\end{aligned}
+\]
+上下两侧的分子都要穿过 $A$，而它们携带的偏差\textbf{反号}，故净通量应取二者之差：
+\[
+\boxed{\dot G=-\frac13\,nA\,\bar v\,\bar\lambda\,\frac{\dd g}{\dd z}} ,
+\]
+负号表示输运总是沿梯度反方向进行（高浓度向低浓度、高温向低温、快层拖慢层）。
+其中角积分是全部 $\dfrac13$ 的来源：
+\[
+\frac{1}{4\pi}\int_{\text{半球}}\cos^2\theta\,\dd\Omega
+=\frac{1}{4\pi}\int_0^{2\pi}\!\!\dd\varphi\int_0^{\pi/2}\!\cos^2\theta\sin\theta\,\dd\theta
+=\frac{1}{4\pi}\cdot2\pi\cdot\frac13=\frac16,
+\]
+两侧合并给出 $\dfrac13$。
+
+\subsection*{三种输运系数}
+
+把 $g$ 分别取为动量、热量、粒子数，就得到三个输运定律。
+
+\paragraph{（1）$g$ 为动量：黏滞。}
+$g=mu_x$（单位体积携带的 $x$ 向动量），$\dd g/\dd z=m\dd u_x/\dd z$，故作用在 $A$ 上的黏滞力
+\[
+F=-\frac13\frac{\dd u_x}{\dd z}\,mAn\bar v\bar\lambda,
+\qquad
+\boxed{\eta=\frac13 mn\bar v\bar\lambda=\frac13\rho\bar v\bar\lambda},
 \]
 其中 $\rho=nm$ 是质量密度。
 
+\paragraph{（2）$g$ 为热量：热传导。}
+单位体积携带的热量为 $g=\rho c_mT$（$c_m$ 为单位质量定容热容），$\dd g/\dd z=\rho c_m\dd T/\dd z$，故
+\[
+\frac{\dd Q}{\dd t}=-\frac13\frac{\dd T}{\dd z}\,\rho c_mA\bar v\bar\lambda,
+\qquad
+\boxed{\kappa=\frac13\rho c_m\bar v\bar\lambda=\frac13c_V^{(\mathrm{vol})}\bar v\bar\lambda},
+\]
+其中 $c_V^{(\mathrm{vol})}=\rho c_m$ 是单位体积定容热容。
 
-\subsection*{穿越平面的黏滞动量通量积分}
-设流速沿 $x$ 方向而沿 $z$ 方向变化，分子撞过面积 $A$ 的平面时，出发位置相对平面约为 $-\ell\cos\theta$。Taylor 展开
+\paragraph{（3）$g$ 为粒子数：扩散。}
+$g=n$，$\dd g/\dd z=\dd n/\dd z$，故
 \[
-u_x(z-\ell\cos\theta)\simeq
-u_x(z)-\ell\cos\theta\,\frac{\dd u_x}{\dd z}.
-\]
-按照各向同性的入射角分布，上下两侧动量通量差包含角平均
-\[
-\int_0^{\pi/2}\cos^2\theta\sin\theta\,\dd\theta=\frac13.
-\]
-于是得到模型量级
-\[
-\tau_{xz}\simeq
--\frac13 nm\avg{v\ell}\frac{\dd u_x}{\dd z}
-\simeq-\frac13\rho\bar v\lambda\frac{\dd u_x}{\dd z},
-\]
-这里负号指\emph{从上向下传递的 $x$ 向动量通量}与速度梯度相反；若采用作用于上表面的应力张量分量定义，则常写为
-$\tau_{xz}=\eta\,\dd u_x/\dd z$。约定必须在图中明确。
-由此
-\[
-\eta\simeq\frac13\rho\bar v\lambda,\quad
-\kappa\simeq\frac13c_V^{(\rm vol)}\bar v\lambda,\quad
-D\simeq\frac13\bar v\lambda.
-\]
-中 $\eta\propto T^{1/2}$ 是这一模型的温标结果，并非所有实际气体的精确幂律。
-
-
-\subsection*{热导率}
-若单位体积定容热容记为 $c_V^{(\mathrm{vol})}$，则热导率量级为
-\[
-\boxed{\kappa\sim \frac13c_V^{(\mathrm{vol})}\bar v\lambda}.
+\frac{\dd N}{\dd t}=-\frac13\frac{\dd n}{\dd z}A\bar v\bar\lambda,
+\qquad
+\boxed{D=\frac13\bar v\bar\lambda}.
 \]
 
 \begin{keybox}
-三种输运系数有着完全类似的结构：
+三个系数有完全相同的结构：
 \[
-D\sim \frac13\bar v\lambda,\qquad
-\eta\sim \frac13\rho\bar v\lambda,\qquad
-\kappa\sim \frac13c_V^{(\mathrm{vol})}\bar v\lambda.
+D=\frac13\bar v\bar\lambda,\qquad
+\eta=\frac13\rho\bar v\bar\lambda=\rho D,\qquad
+\kappa=\frac13\rho c_m\bar v\bar\lambda=c_m\eta,
 \]
-它们都可以理解为“某种宏观量被分子热运动跨越一自由程携带”的结果。
+最后两个关系式之所以成立，是因为在此简化模型里“$\bar v$、$\bar\lambda$ 对三种输运过程是同一个数”。
+由此得到两个无量纲的判据：
+\[
+\nu\equiv\frac{\eta}{\rho}=D\quad(\text{运动黏度}),
+\qquad
+\alpha\equiv\frac{\kappa}{\rho c_m}=D\quad(\text{热扩散系数}).
+\]
+刚球模型把三个输运系数归并成\textbf{同一个} $D$；真实气体中 $\nu$、$\alpha$ 与 $D$ 只是同量级（$\mathrm{Pr}=\nu/\alpha\sim1$ 就是这一图像的反映）。
 \end{keybox}
 
+\subsection*{系数化简与温度、压强依赖}
+
+把 $\rho=nm$、$\bar\lambda=\dfrac{1}{\sqrt2\,n\sigma}$、$\sigma=\pi d^2$、$\bar v=\sqrt{\dfrac{8\kBT}{\pi m}}$、$p=n\kBT$ 代入，得
+\[
+\begin{cases}
+\eta=\dfrac{2}{3\pi d^2}\sqrt{\dfrac{m\kBT}{\pi}},\\[3mm]
+\kappa=\dfrac{2c_m}{3\pi d^2}\sqrt{\dfrac{m\kBT}{\pi}}=c_m\eta,\\[3mm]
+D=\dfrac{2}{3\pi d^2}\dfrac{(\kBT)^{3/2}}{\sqrt{\pi m}\,p}=\dfrac{\eta}{\rho}.
+\end{cases}
+\]
+因此
+\[
+\boxed{\eta,\ \kappa\propto\frac{\sqrt{mT}}{d^2}},
+\qquad
+\boxed{D\propto\frac{1}{p}\sqrt{\frac{T^3}{m}}} .
+\]
+三个结论值得记住：
+\begin{enumerate}[leftmargin=1.8em,itemsep=1pt]
+\item $\eta$、$\kappa$ 与压强\textbf{无关}（$\bar\lambda\propto1/p$ 与 $n\propto p$ 恰好相消），只随 $T^{1/2}$ 增长；
+\item $D$ 与压强成反比，随 $T^{3/2}$ 增长；
+\item 三者都 $\propto d^{-2}$，即分子越“胖”，输运越弱。
+\end{enumerate}
+
+\subsection*{与实验的比较}
+
+\[\eta,\ \kappa\propto T^{0.7},
+\qquad
+D\propto T^{1.75\sim2.0}\]
+——实验的幂指数比 $T^{1/2}$ 陡得多，上述理论推导与实际不一致，其原因在于真实分子间有吸引势（不是刚球）：温度升高，分子“擦边而过”的碰撞（大 $b$ 小偏折）贡献改变，有效截面随温度下降，故 $\eta$ 涨得比 $\sqrt T$ 快。这说明初级分子动理论只是\textbf{数量级}理论。
+
 \begin{notebox}
-还可以指出：对稀薄气体，简单模型预言黏滞系数与压强几乎无关，而与温度大致呈幂律关系。更精确的指数需借助更完整的碰撞理论，简单平均自由程模型只能给出量级与趋势。
+初级分子动理论结果成立的条件是
+\[
+\boxed{d\ll\bar\lambda\ll L},
+\]
+其中 $d$ 是分子直径，$\bar\lambda$ 是平均自由程，$L$ 是容器或宏观梯度的特征尺度。
+右半边保证“分子在容器内多次碰撞、可用局域平衡描述”，左半边保证“分子是稀薄的、碰撞是二体事件”。
+高压液体、极低压（自由分子流）、强梯度（激波）三种情形都要另作处理。
 \end{notebox}
 
 \section{布朗运动及其引起的扩散}
